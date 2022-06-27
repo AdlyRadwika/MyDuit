@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, setDoc, doc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -15,7 +15,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
-const db = getFirestore()
+
+const db = getFirestore(app);
 
 const registerForm = document.querySelector(".register")
 registerForm.addEventListener('submit', (e) => {
@@ -26,10 +27,15 @@ registerForm.addEventListener('submit', (e) => {
     const password = registerForm.password.value
 
     createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-    // Signed in 
+    .then(async (userCredential) => {
+    // Created 
     const user = userCredential.user;
     console.log('new user: ', user);
+    // Add to firestore
+    await setDoc(doc(db, "users", user.uid), {
+        name: name
+    });
+    // To alert and reset form
     alert("Akun dibuat!");
     registerForm.reset();
     })
