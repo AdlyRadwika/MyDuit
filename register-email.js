@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js';
-import { getFirestore, collection, addDoc, setDoc, doc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+import { getFirestore, setDoc, doc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
+import { getAuth, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyATZkvNo0d64fJQnKhryVX9c0PKAwlrkjk",
@@ -15,7 +15,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
-
 const db = getFirestore(app);
 
 const registerForm = document.querySelector(".register")
@@ -35,9 +34,9 @@ registerForm.addEventListener('submit', (e) => {
     await setDoc(doc(db, "users", user.uid), {
         name: name
     });
-    // To alert and reset form
+    // To alert and redirect to login
     alert("Akun dibuat!");
-    registerForm.reset();
+    location.href = "./index.html"
     })
     .catch((error) => {
     const errorCode = error.code;
@@ -47,5 +46,3 @@ registerForm.addEventListener('submit', (e) => {
     alert(errorMessage)
     });
 })
-
-
