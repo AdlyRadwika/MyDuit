@@ -30,7 +30,7 @@ registerForm.addEventListener('submit', (e) => {
             });
             // To alert and redirect to login
             alert("Akun dibuat!");
-            location.href = "./index.html";
+            location.href = "./home.html";
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -49,7 +49,7 @@ document.getElementById('btn-google').addEventListener('click', (e)=>{
         const userSnap = await getDoc(userRef);
         
         if (userSnap.exists()) {
-            location.href = "./index.html";
+            location.href = "./home.html";
             console.log("SUCCESS LOGIN");
         } else {
             await setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -59,7 +59,7 @@ document.getElementById('btn-google').addEventListener('click', (e)=>{
                 timestamp: serverTimestamp()
             });
             alert("Akun dibuat!");
-            location.href = "./index.html";
+            location.href = "./home.html";
             console.log("SUCCESS REGISTER");
         }
         

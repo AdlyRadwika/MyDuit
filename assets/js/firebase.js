@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js';
 import { collection, getFirestore, setDoc, getDoc, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, browserSessionPersistence, setPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyATZkvNo0d64fJQnKhryVX9c0PKAwlrkjk",
@@ -14,14 +14,18 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+let auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
+
+const refreshAuth = function () {
+    auth = getAuth(app);
+}
 
 export{
     app, auth, provider, db,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider,
+    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, browserSessionPersistence, setPersistence, refreshAuth, onAuthStateChanged,
     //Firestore
     getFirestore, setDoc, doc, serverTimestamp, collection, getDoc
 }
