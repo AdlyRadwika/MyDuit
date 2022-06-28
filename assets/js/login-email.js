@@ -56,7 +56,7 @@ googleBtn.addEventListener("click", (e) => {
                     console.log("SUCCESS LOGIN");
                 } else {
                     await setDoc(doc(db, "users", auth.currentUser.uid), {
-                        name: "John Doe",
+                        name: auth.currentUser.displayName,
                         email: auth.currentUser.email,
                         daily_expense: 0,
                         timestamp: serverTimestamp()
