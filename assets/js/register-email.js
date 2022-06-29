@@ -1,17 +1,10 @@
 import {
     app, auth, provider, db,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged,
+    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider,
     //Firestore
     getFirestore, setDoc, doc, serverTimestamp, collection, getDoc
 } from './firebase.js'
-
-//To control session
-onAuthStateChanged(auth, (user) => {
-    if (user != null) {
-      location.href = "./home.html"
-    }
-});
 
 const registerForm = document.querySelector(".register")
 registerForm.addEventListener('submit', (e) => {
