@@ -13,6 +13,8 @@ onAuthStateChanged(auth, (user) => {
       const uid = user.uid;
       console.log("HOY");
       console.log(uid);
+    } else if (user == null) {
+      location.href = "./index.html"
     } else {
       console.log("error");
     }
