@@ -1,17 +1,10 @@
 import {
     app, auth, provider, db,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, setPersistence, browserSessionPersistence, onAuthStateChanged,
+    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, setPersistence, browserSessionPersistence,
     //Firestore
     getFirestore, setDoc, doc, getDoc
 } from './firebase.js'
-
-//To control session
-onAuthStateChanged(auth, (user) => {
-    if (user != null) {
-      location.href = "./home.html"
-    }
-});
 
 const loginForm = document.querySelector(".login");
 const googleBtn = document.getElementById("btn-google");
