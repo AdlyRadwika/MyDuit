@@ -1,38 +1,56 @@
-body{
-    background-color: #f1f1f1be;
+body {
+    background: url(https://static.vecteezy.com/system/resources/previews/002/787/462/original/abstract-water-wave-design-background-vector.jpg) no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
+    overflow: hidden;
 }
 
 .card {
-    top: 25%;
-    border-color: black;
-    box-shadow: 4px 4px 4px grey;
+    top: 15%;
+    background-color: #ffffff;
+    border: none;
 }
 .regis {
-    top: 18%;
+    top: 8%;
 }
-.card input{
-    border-color: black;
+.card h3{
+    
+    text-align: center;
+}
+.card .form-control{
+    border-radius:10px;
+    border: none;
+    box-sizing:border-box;
+    background-color: #E8E8E8;
+}
+.card .form-control:focus{
+    border-color:none;
+    box-shadow:none;
 }
 .card .button {
     text-align: center;
 }
 
 #btn-login,#btn-regis{
-    box-shadow: 2px 2px 2px grey;
+    display: inline-block;
+    background: #003249;
+    color: white;
+    border-radius: 10px;
+}
+#btn-login:hover,#btn-regis:hover {
+    cursor: pointer;
+    background: #003249a2;
 }
 
 #btn-google {
     display: inline-block;
     background: #4285F4;
     color: white;
-    border-radius: 5px;
-    border: thin solid #4285F4;
-    box-shadow: 2px 2px 2px grey;
+    border-radius: 10px;
 }
 #btn-google:hover {
     cursor: pointer;
-    background: #366cc4;
-    border: thin solid #366cc4;
+    background: #4286f4c2;
 }
 
 /* Extra small devices (phones, 600px and down) */
@@ -52,20 +70,21 @@ body{
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     .card{width: 45%}
-    #btn-login, #btn-regis{width: 50%;}
-    #btn-google{width: 50%;}
+    #btn-login, #btn-regis{width: 55%;}
+    #btn-google{width: 55%;}
 }
+
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .card{width: 45%}
+    .card{width: 40%}
     #btn-login, #btn-regis{width: 50%;}
     #btn-google{width: 50%;}
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-    .card{width: 45%}
-    #btn-login, #btn-regis{width: 50%;}
-    #btn-google{width: 50%;}
+    .card{width: 30%}
+    #btn-login, #btn-regis{width: 55%;}
+    #btn-google{width: 55%;}
 }
