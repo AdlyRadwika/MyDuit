@@ -1,6 +1,28 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js';
-import { collection, getFirestore, setDoc, getDoc, doc, serverTimestamp, addDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, browserSessionPersistence, setPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+import { collection,
+    getFirestore,
+    addDoc, 
+    setDoc, 
+    getDoc,
+    getDocs, 
+    doc, 
+    deleteDoc,
+    serverTimestamp,
+    query, 
+    orderBy, 
+    startAfter, 
+    limit,
+} from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
+import { getAuth,
+    GoogleAuthProvider,
+    signInWithPopup, 
+    signInWithEmailAndPassword, 
+    signOut, 
+    createUserWithEmailAndPassword,
+    browserSessionPersistence, 
+    setPersistence, 
+    onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyATZkvNo0d64fJQnKhryVX9c0PKAwlrkjk",
@@ -27,5 +49,17 @@ export{
     //Firebase Auth
     signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, browserSessionPersistence, setPersistence, refreshAuth, onAuthStateChanged,
     //Firestore
-    getFirestore, setDoc, doc, serverTimestamp, collection, getDoc, addDoc
+    getFirestore, 
+    addDoc,
+    setDoc, 
+    doc,
+    deleteDoc, 
+    serverTimestamp, 
+    collection, 
+    getDoc, 
+    getDocs, 
+    query, 
+    orderBy, 
+    startAfter, 
+    limit,
 }
