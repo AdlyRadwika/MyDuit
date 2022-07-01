@@ -7,14 +7,6 @@ import{
 } from './firebase.js'
 
 const categoryForm = document.querySelector(".category");
-const category = categoryForm.pick.value
-const nominal = categoryForm.nominal.value
-const desc = categoryForm.description.value
-const date = categoryForm.date.value
-const dateConv = new Date(date);
-const dailyCode = dateConv.toLocaleString('default', { day:'2-digit', month:'2-digit', year:'numeric' });
-const monthCode = dateConv.toLocaleString('default', { month:'2-digit', year:'numeric' });
-// const expenseId = 
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -32,6 +24,13 @@ onAuthStateChanged(auth, (user) => {
 
 async function insertData(user){
   const uid = user.uid;
+  const category = categoryForm.pick.value
+  const nominal = categoryForm.nominal.value
+  const desc = categoryForm.description.value
+  const date = categoryForm.date.value
+  const dateConv = new Date(date);
+  const dailyCode = dateConv.toLocaleString('default', { day:'2-digit', month:'2-digit', year:'numeric' });
+  const monthCode = dateConv.toLocaleString('default', { month:'2-digit', year:'numeric' });
   const docRef = await addDoc(collection(db, "expenses"), {
       category: category,
       nominal: nominal,
@@ -41,8 +40,7 @@ async function insertData(user){
       user_id: uid,
       timestamp: serverTimestamp()
   });
-
-  console.log(""+category+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+uid);
+  console.log(""+category+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+user.uid);
   alert("Berhasil tambah data");
 }
 
