@@ -12,6 +12,9 @@
 .flex-child:first-child {
     margin-right: 20px;
 }
+.flex-child.green{
+    text-align: end;
+}
 
 .second{
     margin-top: 5%;
