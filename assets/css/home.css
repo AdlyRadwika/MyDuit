@@ -1,4 +1,8 @@
-.card .overview{
+.overview{
+    margin-top: 3%;
+}
+
+.card .overview-h1{
     text-align: center;
 }
 
@@ -15,7 +19,49 @@
 .flex-child.green{
     text-align: end;
 }
+.flex-child.orange{
+    text-align: end;
+}
 
 .second{
     margin-top: 5%;
+}
+
+.things{
+    margin-top: 5%;
+}
+.things .input, .monthly-logs{
+    width: fit-content;
+}
+.things h3{
+    text-align: center;
+}
+
+.insert .button{
+    text-align: center;
+}
+
+.logs{
+    margin-top: 10px;
+}
+.logs .icon-row, .icon-row2{
+    display: inline-flex;
+}
+.logs .center{
+    margin-top: 15px;
+    margin-left: 15px;
+}
+.logs .center2{
+    margin-left: 15px;
+    margin-top: 25px;
+}
+.logs .space{
+    color: white;
+}
+.logs .right{
+    text-align: end;
+}
+
+.monthly-logs .months{
+    text-align: center;
 }

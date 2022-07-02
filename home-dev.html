@@ -35,9 +35,9 @@
         </div>
     </div>
     </nav>
-    <div class="card mx-auto w-75">
+    <div class="overview card mx-auto w-75">
         <div class="card-body">
-            <h1 class="overview">Overview</h1>
+            <h1 class="overview-h1">Overview</h1>
             <hr>
             <div class="container">
                 <div class="first row">
@@ -87,6 +87,104 @@
                             </div>                            
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="things row mx-auto">
+        <div class="col-md-4">
+            <div class="input card mx-auto">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h3>Insert Expense</h3>
+                    </div>            
+                    <form class="insert">
+                        <div class="mb-2">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="category" class="form-control" id="category" name="category">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nominal" class="form-label">Nominal</label>
+                            <input type="number" class="form-control" id="nominal" name="nominal">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="description" class="form-control" id="description" name="description">
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="date" name="date">
+                        </div>
+                        <div class="button mb-3">
+                            <button type="submit" class="btn btn-primary" id="btn-submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
+        <div class="col-md-4">
+            <h3>Logs</h3>
+            <div class="logs card mx-auto">               
+                    <div class="flex-container">
+                        <div class="flex-child magenta">
+                            <h4 class="center">Foods</h4>
+                            <p class="center2">Lawless Burger</p>
+                        </div>
+                        <div class="flex-child green">
+                            <div class="icon-row">
+                                <p class="center">Rp. 75.000</p>
+                                <p class="space">aa</p>
+                                <button class="btn"><i class="bi bi-pencil-fill"></i></button>
+                            </div>
+                            <div class="icon-row2">
+                                <p class="center">26 Jun 2022</p>
+                                <p class="space">aa</p>
+                                <button class="btn"><i class="bi bi-trash-fill"></i></button>
+                            </div>
+                        </div>                            
+                    </div>              
+            </div>
+            <div class="logs card mx-auto">               
+                <div class="flex-container">
+                    <div class="flex-child magenta">
+                        <h4 class="center">Foods</h4>
+                        <p class="center2">Lawless Burger</p>
+                    </div>
+                    <div class="flex-child green">
+                        <div class="icon-row">
+                            <p class="center">Rp. 75.000</p>
+                            <p class="space">aa</p>
+                            <button class="btn"><i class="bi bi-pencil-fill"></i></button>
+                        </div>
+                        <div class="icon-row2">
+                            <p class="center">26 Jun 2022</p>
+                            <p class="space">aa</p>
+                            <button class="btn"><i class="bi bi-trash-fill"></i></button>
+                        </div>
+                    </div>                            
+                </div>              
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="monthly-logs card mx-auto">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h3>Monthly Logs</h3>
+                    </div>            
+                    <form class="months">
+                        <div class="button mb-3">
+                            <button class="btn btn-primary" id="btn-submit">06/2022</button>
+                        </div>
+                        <div class="button mb-3">
+                            <button class="btn btn-primary" id="btn-submit">05/2022</button>
+                        </div>
+                        <div class="button mb-3">
+                            <button class="btn btn-primary" id="btn-submit">04/2022</button>
+                        </div>
+                        <div class="button mb-3">
+                            <button class="btn btn-primary" id="btn-submit">03/2022</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
