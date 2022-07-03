@@ -12,6 +12,7 @@ import { collection,
     orderBy, 
     startAfter, 
     limit,
+    where,
 } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
 import { getAuth,
     GoogleAuthProvider,
@@ -62,4 +63,5 @@ export{
     orderBy, 
     startAfter, 
     limit,
+    where,
 }

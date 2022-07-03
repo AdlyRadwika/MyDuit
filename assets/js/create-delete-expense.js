@@ -3,19 +3,26 @@ import{
     //Firebase Auth
     signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, browserSessionPersistence, setPersistence, refreshAuth, onAuthStateChanged,
     //Firestore
-    getFirestore, setDoc, doc, serverTimestamp, collection, getDoc, addDoc, deleteDoc
+    getFirestore, setDoc, doc, serverTimestamp, collection, getDoc, addDoc, deleteDoc, getDocs, query, where,
 } from './firebase.js'
 
 const categoryForm = document.querySelector(".category");
+const table = document.querySelector('.tbody');
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
-      categoryForm.addEventListener('submit', (e) => {
+      document.querySelector("#btn-create").addEventListener('submit', (e) => {
           e.preventDefault();
           insertData(user);
       });
+
+      document.querySelector("#btn-read").addEventListener('click', (e) =>{
+        e.preventDefault();
+        table.innerHTML = ``;
+        data(user);
+      })
 
     } else {
       console.log("error");
@@ -46,4 +53,56 @@ async function insertData(user){
 
 async function deleteData(id){
   await deleteDoc(doc(db, "expenses", id));
+}
+
+async function data(user){
+  const q = query(collection(db, "expenses"), where("user_id","==", user.uid));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+    readData(doc);
+  });
+}
+
+async function readData(docs){
+  let td = document.createElement('tr');
+  let postID = document.createElement('td');
+  let category = document.createElement('td');
+  let nominal = document.createElement('td');
+  let description = document.createElement('td');
+  let monthly = document.createElement('td');
+  let daily = document.createElement('td');
+  let user_id = document.createElement('td');
+  let delBtn = document.createElement('button');
+  delBtn.classList.add("delete", "btn");
+  delBtn.innerHTML=`<i class="bi bi-trash-fill"></i>`;
+
+  td.setAttribute('data-id', docs.id);
+  postID.textContent = docs.id;
+  category.textContent = docs.data().category;
+  nominal.textContent = docs.data().nominal;
+  description.textContent = docs.data().description;
+  monthly.textContent = docs.data().monthly_date_code;
+  daily.textContent = docs.data().daily_date_code;
+  user_id.textContent = docs.data().user_id;
+
+  td.appendChild(postID);
+  td.appendChild(category);
+  td.appendChild(nominal);
+  td.appendChild(description);
+  td.appendChild(monthly);
+  td.appendChild(daily);
+  td.appendChild(user_id);
+  td.appendChild(delBtn);
+
+  table.appendChild(td);
+
+  delBtn.addEventListener('click', async (e) => {
+
+      e.preventDefault();
+      let id = docs.id;
+      deleteData(id);
+      table.innerHTML=``;
+  })
 }
