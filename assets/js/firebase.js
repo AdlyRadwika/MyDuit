@@ -1,5 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js';
-import { collection,
+import {
+    collection,
     getFirestore,
     addDoc, 
     setDoc, 
@@ -13,8 +14,10 @@ import { collection,
     startAfter, 
     limit,
     where,
+    updateDoc,
 } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
-import { getAuth,
+import { 
+    getAuth,
     GoogleAuthProvider,
     signInWithPopup, 
     signInWithEmailAndPassword, 
@@ -50,18 +53,12 @@ export{
     //Firebase Auth
     signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, browserSessionPersistence, setPersistence, refreshAuth, onAuthStateChanged,
     //Firestore
-    getFirestore, 
-    addDoc,
-    setDoc, 
-    doc,
-    deleteDoc, 
-    serverTimestamp, 
-    collection, 
-    getDoc, 
-    getDocs, 
-    query, 
-    orderBy, 
-    startAfter, 
+    getFirestore, addDoc, setDoc, doc, deleteDoc, serverTimestamp, collection, getDoc,
+    getDocs,
+    query,
+    orderBy,
+    startAfter,
     limit,
     where,
+    updateDoc
 }
