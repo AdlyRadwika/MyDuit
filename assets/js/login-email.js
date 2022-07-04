@@ -1,9 +1,9 @@
 import {
-    app, auth, provider, db,
+    auth, provider, db,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, setPersistence, browserSessionPersistence,
+    signInWithPopup, signInWithEmailAndPassword, setPersistence, browserSessionPersistence,
     //Firestore
-    getFirestore, setDoc, doc, getDoc
+    setDoc, doc, getDoc
 } from './firebase.js'
 
 const loginForm = document.querySelector(".login");
@@ -23,7 +23,7 @@ loginForm.addEventListener('submit', (e) => {
             // New sign-in will be persisted with session persistence.
             return signInWithEmailAndPassword(auth, email, password).then((cred) => {
                 console.log('user logged in: ', cred.user)
-                location.href = "./home.html";
+                location.href = "./home-dev.html";
             })
             .catch((err) => {
                 console.log(err.message)
@@ -52,7 +52,7 @@ googleBtn.addEventListener("click", (e) => {
                 const userSnap = await getDoc(userRef);
                 
                 if (userSnap.exists()) {
-                    location.href = "./home.html";
+                    location.href = "./home-dev.html";
                     console.log("SUCCESS LOGIN");
                 } else {
                     await setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -62,7 +62,7 @@ googleBtn.addEventListener("click", (e) => {
                         timestamp: serverTimestamp()
                     });
                     alert("Akun dibuat!");
-                    location.href = "./home.html";
+                    location.href = "./home-dev.html";
                     console.log("SUCCESS REGISTER");
                 }
                 

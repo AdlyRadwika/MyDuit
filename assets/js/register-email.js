@@ -1,9 +1,9 @@
 import {
-    app, auth, provider, db,
+    auth, provider, db,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider,
+    signInWithPopup, createUserWithEmailAndPassword,
     //Firestore
-    getFirestore, setDoc, doc, serverTimestamp, collection, getDoc
+    setDoc, doc, serverTimestamp, getDoc,
 } from './firebase.js'
 
 const registerForm = document.querySelector(".register")
@@ -13,8 +13,6 @@ registerForm.addEventListener('submit', (e) => {
     const name = registerForm.name.value
     const email = registerForm.email.value
     const password = registerForm.password.value
-
-    
 
     createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
@@ -30,7 +28,7 @@ registerForm.addEventListener('submit', (e) => {
             });
             // To alert and redirect to login
             alert("Akun dibuat!");
-            location.href = "./home.html";
+            location.href = "./home-dev.html";
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -49,7 +47,7 @@ document.getElementById('btn-google').addEventListener('click', (e)=>{
         const userSnap = await getDoc(userRef);
         
         if (userSnap.exists()) {
-            location.href = "./home.html";
+            location.href = "./home-dev.html";
             console.log("SUCCESS LOGIN");
         } else {
             await setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -59,13 +57,11 @@ document.getElementById('btn-google').addEventListener('click', (e)=>{
                 timestamp: serverTimestamp()
             });
             alert("Akun dibuat!");
-            location.href = "./home.html";
+            location.href = "./home-dev.html";
             console.log("SUCCESS REGISTER");
         }
         
     }).catch((error) => {
         console.log("ERR " + error);
-       
-        
     });
 });

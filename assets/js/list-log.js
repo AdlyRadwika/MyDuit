@@ -1,7 +1,7 @@
 import {
     auth,db,
     //Firebase Auth
-    onAuthStateChanged,
+    onAuthStateChanged, signOut,
     //Firestore
     addDoc,
     doc,
@@ -22,8 +22,11 @@ let userUuid = null;
 let isCreate = true;
 let editId = null;
 
+
 window.onload = function () {
     console.log('window - onload');
+
+
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -52,9 +55,19 @@ window.onload = function () {
                     updateData();
                 }
             });
+
+            const logoutButton = document.querySelector('.btn-logout')
+            logoutButton.addEventListener('click', async () => {
+                signOut(auth)
+                .then(() => {
+                    alert("You will be redirected to sign in")
+                })
+                .catch((err) => {
+                    console.log(err.message)
+                })
+            })
         } else {
-            location.replace("index.html");
-            alert("Please sign in first");
+            location.href = "./index.html"
         }
     });
 };

@@ -1,9 +1,7 @@
 import{
-    app, auth, provider, db,
+    auth,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword,
-    //Firestore
-    getFirestore, setDoc, doc
+    signOut,
 } from './firebase.js'
 
 const logoutButton = document.querySelector('.btn-logout')
