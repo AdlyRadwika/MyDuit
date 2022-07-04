@@ -224,13 +224,9 @@ async function getMonthlyExpense() {
     const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
     const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
 
-    console.log(monthCode);
-
-    let monthlyRef = doc(db, "monthly_expenses", monthCode);
+    let monthlyRef = doc(db, "monthly_expenses", monthCode+"_"+userUuid);
     const monthlySnap = await getDoc(monthlyRef);
     
-
-    console.log(monthlySnap);
 
     if (monthlySnap.exists()) {
         console.log("exist");
@@ -244,12 +240,15 @@ async function getTodayExpense() {
     const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
     const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
 
-    let todayRef = doc(db, "daily_expenses", dailyCode);
+    console.log("daily load");
+    let todayRef = doc(db, "daily_expenses", dailyCode+"_"+userUuid);
     const todaySnap = await getDoc(todayRef);
-
+    console.log("daily loaded");
+    console.log(todaySnap);
 
     if (todaySnap.exists()) {
-        console.log("exist");
+        console.log("exist daily");
+        console.log("exist daily");
         let tvToday = document.getElementById("tv-today-expense");
         tvToday.innerHTML = "Rp." + todaySnap.data().nominal;
     }
@@ -281,7 +280,7 @@ async function insertData(id){
                 updated_at: serverTimestamp()
             });
 
-            let monthlyRef = doc(db, "monthly_expenses", monthCode);
+            let monthlyRef = doc(db, "monthly_expenses", monthCode+"_"+userUuid);
             const monthlySnap = await getDoc(monthlyRef);
             
             let categoryMap = {};
@@ -305,10 +304,10 @@ async function insertData(id){
                     updated_at: serverTimestamp()
                 };
                 valueAdd["categories"] = categoryMapAdd;
-                await setDoc(doc(db, "monthly_expenses", monthCode), valueAdd);
+                await setDoc(doc(db, "monthly_expenses", monthCode+"_"+userUuid), valueAdd);
             }
 
-            let dailyRef = doc(db, "daily_expenses", dailyCode);
+            let dailyRef = doc(db, "daily_expenses", dailyCode+"_"+userUuid);
             const dailySnap = await getDoc(dailyRef);
             
             if (dailySnap.exists()) {
@@ -328,7 +327,7 @@ async function insertData(id){
                     updated_at: serverTimestamp()
                 };
                 valueAdd["categories"] = categoryMapAdd;
-                await setDoc(doc(db, "daily_expenses", dailyCode), valueAdd);
+                await setDoc(doc(db, "daily_expenses", dailyCode+"_"+userUuid), valueAdd);
             }
 
             console.log(""+categoryData+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+uid);
