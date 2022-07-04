@@ -1,21 +1,19 @@
 import {
-    app, auth, provider, db,
+    auth,db,
     //Firebase Auth
-    signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged,
+    onAuthStateChanged,
     //Firestore
-    getFirestore,
-    setDoc,
+    addDoc,
     doc,
     serverTimestamp,
     collection,
-    getDoc,
     getDocs,
     query,
     orderBy,
     startAfter,
     limit,
-    where,
-    updateDoc
+    updateDoc,
+    deleteDoc,
 } from './firebase.js'
 
 let listLog = [];
@@ -23,7 +21,6 @@ let lastVisible = null;
 let userUuid = null;
 let isCreate = true;
 let editId = null;
-
 
 window.onload = function () {
     console.log('window - onload');
@@ -34,27 +31,31 @@ window.onload = function () {
             // https://firebase.google.com/docs/reference/js/firebase.User
             const uid = user.uid;
             userUuid = uid;
-            
+
             getLogList();
+            
+            const btnPaging = document.getElementById("btn-paging");
+            btnPaging.addEventListener("click", (e) => {
+                getLogList();
+            });
+
+            let btnCreate = document.getElementById("btn-create");
+            btnCreate.addEventListener("click", (e) => {
+                setToCreate();
+            });
+
+            let btnSubmit = document.getElementById("btn-submit-data");
+            btnSubmit.addEventListener("click", (e)=>{
+                if(isCreate == true){
+                    insertData(userUuid);
+                } else{
+                    updateData();
+                }
+            });
         } else {
             location.replace("index.html");
+            alert("Please sign in first");
         }
-    });
-
-
-    const btnPaging = document.getElementById("btn-paging");
-    btnPaging.addEventListener("click", (e) => {
-        getLogList();
-    });
-
-    let btnCreate = document.getElementById("btn-create");
-    btnCreate.addEventListener("click", (e) => {
-        setToCreate();
-    });
-
-    let btnSubmit = document.getElementById("btn-submit-data");
-    btnSubmit.addEventListener("click", (e)=>{
-        updateData();
     });
 };
 
@@ -164,22 +165,74 @@ function createListElement(id, data) {
             <div class="flex-child green">
                 <div class="icon-row">
                     <p class="center">Rp.${data.nominal}</p>
-                    <button class="btn-edit-log"><i class="bi bi-pencil-fill"></i></button>
+                    <button class="edit-log btn"><i class="bi bi-pencil-fill"></i></button>
                 </div>
                 <div class="icon-row2">
-                    <p class="center fs-6">${data.timestamp.toDate().toLocaleString()}</p>
-                    <button class="btn"><i class="bi bi-trash-fill"></i></button>
+                    <p class="center fs-6">${data.daily_date_code}</p>
+                    <button class="delete-log btn"><i class="bi bi-trash-fill"></i></button>
                 </div>
             </div>                            
         </div>              
     </div>
     `
+
+    
     let listId = document.getElementsByClassName("id-log");
-    let listButton = document.getElementsByClassName("btn-edit-log");
+    let listButton = document.getElementsByClassName("edit-log btn");
+    let deleteBtn = document.getElementsByClassName("delete-log btn");
     for (let i=0; i<listId.length; i++) {
         listButton[i].addEventListener("click", (e)=>{
             setEdit(listId[i].innerHTML, listLog[i].data());
         });
+        deleteBtn[i].addEventListener('click', async (e) => {
+            e.preventDefault();
+            deleteData(listLog[i].id);
+        })
     }
 
 } 
+
+async function insertData(id){
+    const uid = id;
+    let category = document.getElementById("category").value;
+    let nominal = document.getElementById("nominal").value;
+    let desc = document.getElementById("description").value;
+    let date = document.getElementById("date").value;
+    const dateConv = new Date(date);
+    const dailyCode = dateConv.toLocaleString('default', { day:'2-digit', month:'2-digit', year:'numeric' });
+    const monthCode = dateConv.toLocaleString('default', { month:'2-digit', year:'numeric' });
+    if(category == "" || nominal == "" || desc == "" || date == ""){
+        alert("Fill the empty input");
+        return false;
+    }else{
+        try {
+            await addDoc(collection(db, "expenses"), {
+                category: category,
+                nominal: nominal,
+                description: desc,
+                monthly_date_code: monthCode,
+                daily_date_code: dailyCode,
+                date: date,
+                user_id: uid,
+                timestamp: serverTimestamp(),
+                updated_at: serverTimestamp()
+            });
+            console.log(""+category+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+uid);
+            alert("Berhasil tambah data");
+            category = "";
+            nominal = "";
+            desc = "";
+            date = "";
+            listLog = [];
+            getLogList();
+        } catch (error) {
+            console.log(error);
+        };
+    }
+}
+
+async function deleteData(id){
+    await deleteDoc(doc(db, "expenses", id));
+    listLog = [];
+    getLogList();
+}

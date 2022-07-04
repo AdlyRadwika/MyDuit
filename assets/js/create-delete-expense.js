@@ -9,11 +9,14 @@ import{
 const categoryForm = document.querySelector(".category");
 const table = document.querySelector('.tbody');
 
-onAuthStateChanged(auth, (user) => {
+window.onload = function () {
+  console.log('window - onload');
+
+  onAuthStateChanged(auth, (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
-      document.querySelector("#btn-create").addEventListener('submit', (e) => {
+      document.querySelector("#btn-create").addEventListener('click', (e) => {
           e.preventDefault();
           insertData(user);
       });
@@ -25,9 +28,11 @@ onAuthStateChanged(auth, (user) => {
       })
 
     } else {
-      console.log("error");
+      alert("You do not have access, please sign in first.");
+      location.replace("index.html");
     }
-});
+  });
+};
 
 async function insertData(user){
   const uid = user.uid;
@@ -38,17 +43,29 @@ async function insertData(user){
   const dateConv = new Date(date);
   const dailyCode = dateConv.toLocaleString('default', { day:'2-digit', month:'2-digit', year:'numeric' });
   const monthCode = dateConv.toLocaleString('default', { month:'2-digit', year:'numeric' });
-  const docRef = await addDoc(collection(db, "expenses"), {
-      category: category,
-      nominal: nominal,
-      description: desc,
-      monthly_date_code: monthCode,
-      daily_date_code: dailyCode,
-      user_id: uid,
-      timestamp: serverTimestamp()
-  });
-  console.log(""+category+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+user.uid);
-  alert("Berhasil tambah data");
+  if(category == "" || nominal == "" || desc == "" || date == ""){
+    alert("Fill the empty input");
+    return false;
+  }else{
+    try {
+      await addDoc(collection(db, "expenses"), {
+          category: category,
+          nominal: nominal,
+          description: desc,
+          monthly_date_code: monthCode,
+          daily_date_code: dailyCode,
+          date: date,
+          user_id: uid,
+          timestamp: serverTimestamp(),
+          updated_at: serverTimestamp()
+      });
+      console.log(""+category+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+user.uid);
+      alert("Berhasil tambah data");
+      categoryForm.reset();
+    } catch (error) {
+      console.log(error);
+    };
+  }
 }
 
 async function deleteData(id){

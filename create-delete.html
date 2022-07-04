@@ -11,9 +11,10 @@
 <body>
     <form class="category">
         <div class="mb-2">
-            <label for="category" class="form-label">Category</label>
-            <select type="pick" name="pick" class="form-select" aria-label="Default select example">
-                <option selected value="Daily needs">Daily needs</option>
+            <label for="validationDefault01" class="form-label">Category</label>
+            <select type="pick" name="pick" class="form-select" id="validationDefault01" required>
+                <option selected disabled value="">Choose a category</option>
+                <option value="Daily needs">Daily needs</option>
                 <option value="Transport">Transport</option>
                 <option value="Shopping">Shopping</option>
                 <option value="Meals">Meals</option>
@@ -22,24 +23,24 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="nominal" class="form-label">Nominal</label>
-            <input type="number" class="form-control" id="nominal" name="nominal" placeholder="50000">
+            <label for="validationDefault02" class="form-label">Nominal</label>
+            <input type="number" class="form-control" id="validationDefault02" name="nominal" required>
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <input type="description" class="form-control" id="description" name="description" placeholder="Isi pulsa">
+            <label for="validationDefault03" class="form-label">Description</label>
+            <input type="description" class="form-control" id="validationDefault03" name="description" required>
         </div>
         <div class="mb-3">
-            <label for="date" class="form-label">Date</label>
-            <input type="date" class="form-control" id="date" name="date">
+            <label for="validationDefault04" class="form-label">Date</label>
+            <input type="date" class="form-control" id="validationDefault04" name="date" required>
         </div>
         <div class="button mb-3">
             <button type="submit" class="btn btn-outline-dark" id="btn-create">Create</button>
         </div>
-        <div class="button mb-3">
-            <button type="submit" class="btn btn-outline-dark" id="btn-read">Read</button>
-        </div>
     </form>
+    <div class="button mb-3">
+        <button class="btn btn-outline-dark" id="btn-read">Read</button>
+    </div>
     <div class="container">
         <table class="table" id="table">
         <thead>
