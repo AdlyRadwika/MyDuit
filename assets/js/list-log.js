@@ -7,6 +7,7 @@ import {
     doc,
     serverTimestamp,
     collection,
+    getDoc,
     getDocs,
     query,
     orderBy,
@@ -14,6 +15,9 @@ import {
     limit,
     updateDoc,
     deleteDoc,
+    where,
+    increment,
+    setDoc
 } from './firebase.js'
 
 let listLog = [];
@@ -26,8 +30,6 @@ let editId = null;
 window.onload = function () {
     console.log('window - onload');
 
-
-
     onAuthStateChanged(auth, (user) => {
         if (user) {
             // User is signed in, see docs for a list of available properties
@@ -36,6 +38,8 @@ window.onload = function () {
             userUuid = uid;
 
             getLogList();
+            getTodayExpense();
+            getMonthlyExpense();
             
             const btnPaging = document.getElementById("btn-paging");
             btnPaging.addEventListener("click", (e) => {
@@ -49,7 +53,7 @@ window.onload = function () {
 
             let btnSubmit = document.getElementById("btn-submit-data");
             btnSubmit.addEventListener("click", (e)=>{
-                if(isCreate == true){
+                if(isCreate === true){
                     insertData(userUuid);
                 } else{
                     updateData();
@@ -94,7 +98,7 @@ function setToCreate() {
 
 async function getLogList() {
     if (listLog.length == 0) {
-        const first = query(collection(db, "expenses"), orderBy("timestamp"), limit(2));
+        const first = query(collection(db, "expenses"), orderBy("timestamp", "desc"), where("user_id", "==", userUuid), limit(5));
         let documentSnapshots = null;
         await getDocs(first).then(result => {
             documentSnapshots = result;
@@ -106,13 +110,14 @@ async function getLogList() {
         listLog = documentSnapshots.docs;
 
         lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
-        console.log(listLog[0].id);
+        
 
     } else {
         const next = query(collection(db, "expenses"),
-            orderBy("timestamp"),
+            orderBy("timestamp", "desc"),
+            where("user_id", "==", userUuid), 
             startAfter(lastVisible),
-            limit(2));
+            limit(5));
 
         const documentSnapshots = await getDocs(next);
 
@@ -134,10 +139,15 @@ async function updateData() {
     let inputDesc = document.getElementById("description");
     let inputDate = document.getElementById("date");
     let inputNominal = document.getElementById("nominal");
+    const d = inputDate.value;
+    const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+    const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
     await updateDoc(docRef, {
         category: inputCat.value,
         description: inputDesc.value,
-        date: inputDate.value,
+        daily_date_code: dailyCode,
+        monthly_date_code: monthCode,
+        date: serverTimestamp(new Date(inputDate.value)),
         nominal: inputNominal.value,
         updated_at: serverTimestamp()
     });
@@ -161,7 +171,11 @@ function setEdit(id, data) {
 
     inputCat.value = data.category;
     inputDesc.value = data.description;
-    inputDate.valueAsDate = data.timestamp.toDate();
+    let strDate = data.daily_date_code.split("-");
+    console.log(strDate);
+    let d = new Date(parseInt(strDate[2]), parseInt(strDate[0])-1, parseInt(strDate[1])+1);
+    console.log(d);
+    inputDate.valueAsDate = d;
     inputNominal.value = data.nominal;
 }
 
@@ -205,39 +219,129 @@ function createListElement(id, data) {
 
 } 
 
+async function getMonthlyExpense() {
+    const d = new Date();
+    const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+    const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
+
+    console.log(monthCode);
+
+    let monthlyRef = doc(db, "monthly_expenses", monthCode);
+    const monthlySnap = await getDoc(monthlyRef);
+    
+
+    console.log(monthlySnap);
+
+    if (monthlySnap.exists()) {
+        console.log("exist");
+        let tvmonthly = document.getElementById("tv-monthly-expense");
+        tvmonthly.innerHTML = "Rp." + monthlySnap.data().nominal;
+    }
+}
+
+async function getTodayExpense() {
+    const d = new Date();
+    const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+    const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
+
+    let todayRef = doc(db, "daily_expenses", dailyCode);
+    const todaySnap = await getDoc(todayRef);
+
+
+    if (todaySnap.exists()) {
+        console.log("exist");
+        let tvToday = document.getElementById("tv-today-expense");
+        tvToday.innerHTML = "Rp." + todaySnap.data().nominal;
+    }
+}
+
 async function insertData(id){
     const uid = id;
-    let category = document.getElementById("category").value;
+    let categoryData = document.getElementById("category").value;
     let nominal = document.getElementById("nominal").value;
     let desc = document.getElementById("description").value;
     let date = document.getElementById("date").value;
-    const dateConv = new Date(date);
-    const dailyCode = dateConv.toLocaleString('default', { day:'2-digit', month:'2-digit', year:'numeric' });
-    const monthCode = dateConv.toLocaleString('default', { month:'2-digit', year:'numeric' });
-    if(category == "" || nominal == "" || desc == "" || date == ""){
+    const d = new Date(date);
+    const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+    const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
+    if(categoryData == "" || nominal == "" || desc == "" || date == ""){
         alert("Fill the empty input");
         return false;
     }else{
         try {
             await addDoc(collection(db, "expenses"), {
-                category: category,
-                nominal: nominal,
+                category: categoryData,
+                nominal: parseInt(nominal),
                 description: desc,
                 monthly_date_code: monthCode,
                 daily_date_code: dailyCode,
                 date: date,
                 user_id: uid,
-                timestamp: serverTimestamp(),
+                timestamp: serverTimestamp(new Date(date.value)),
                 updated_at: serverTimestamp()
             });
-            console.log(""+category+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+uid);
+
+            let monthlyRef = doc(db, "monthly_expenses", monthCode);
+            const monthlySnap = await getDoc(monthlyRef);
+            
+            let categoryMap = {};
+            let categoryMapAdd = {};
+            categoryMap[categoryData] = increment(1);
+            categoryMapAdd[categoryData] = 1;
+            if (monthlySnap.exists()) {
+                let valueUpdate = {
+                    categories: categoryMap,
+                    nominal: increment(parseInt(nominal)),
+                    updated_at: serverTimestamp()
+                };
+                valueUpdate["categories"] = categoryMap;
+                await updateDoc(monthlyRef, valueUpdate);
+            } else {
+                let valueAdd = {
+                    categories: categoryMapAdd,
+                    nominal: parseInt(nominal),
+                    user_id: userUuid,
+                    timestamp: serverTimestamp(new Date()),
+                    updated_at: serverTimestamp()
+                };
+                valueAdd["categories"] = categoryMapAdd;
+                await setDoc(doc(db, "monthly_expenses", monthCode), valueAdd);
+            }
+
+            let dailyRef = doc(db, "daily_expenses", dailyCode);
+            const dailySnap = await getDoc(dailyRef);
+            
+            if (dailySnap.exists()) {
+                let valueUpdate = {
+                    categories: categoryMap,
+                    nominal: increment(parseInt(nominal)),
+                    updated_at: serverTimestamp()
+                };
+                valueUpdate["categories"] = categoryMap;
+                await updateDoc(dailyRef, valueUpdate);
+            } else {
+                let valueAdd = {
+                    categories: categoryMapAdd,
+                    nominal: parseInt(nominal),
+                    user_id: uid,
+                    timestamp: serverTimestamp(new Date(date.value)),
+                    updated_at: serverTimestamp()
+                };
+                valueAdd["categories"] = categoryMapAdd;
+                await setDoc(doc(db, "daily_expenses", dailyCode), valueAdd);
+            }
+
+            console.log(""+categoryData+"|"+nominal+"|"+desc+"|"+date+"|"+dailyCode+"|"+monthCode+"|"+uid);
             alert("Berhasil tambah data");
-            category = "";
+            categoryData = "";
             nominal = "";
             desc = "";
             date = "";
+            setToCreate();
             listLog = [];
             getLogList();
+            getTodayExpense();
+            getMonthlyExpense();
         } catch (error) {
             console.log(error);
         };

@@ -15,6 +15,7 @@ import {
     limit,
     where,
     updateDoc,
+    increment,
 } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
 import { 
     getAuth,
@@ -49,7 +50,7 @@ const refreshAuth = function () {
 }
 
 export{
-    app, auth, provider, db,
+     app, auth, provider, db,
     //Firebase Auth
     signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, browserSessionPersistence, setPersistence, refreshAuth, onAuthStateChanged,
     //Firestore
@@ -60,5 +61,6 @@ export{
     startAfter,
     limit,
     where,
-    updateDoc
+    updateDoc,
+    increment,
 }
