@@ -17,7 +17,8 @@ import {
     deleteDoc,
     where,
     increment,
-    setDoc
+    setDoc,
+    runTransaction
 } from './firebase.js'
 
 let listLog = [];
@@ -25,6 +26,7 @@ let lastVisible = null;
 let userUuid = null;
 let isCreate = true;
 let editId = null;
+let editPreviousData = null;
 
 
 window.onload = function () {
@@ -40,6 +42,7 @@ window.onload = function () {
             getLogList();
             getTodayExpense();
             getMonthlyExpense();
+            
             
             const btnPaging = document.getElementById("btn-paging");
             btnPaging.addEventListener("click", (e) => {
@@ -83,6 +86,7 @@ function setToCreate() {
     btnCreate.classList.add("invisible");
     infoEdit.classList.add("invisible");
     editId = null;
+    editPreviousData = null;
     isCreate = true;
 
     let inputCat = document.getElementById("category");
@@ -140,28 +144,37 @@ async function updateData() {
     let inputDate = document.getElementById("date");
     let inputNominal = document.getElementById("nominal");
     const dateVal = inputDate.value;
-    console.log(dateVal);
-    const dateArr = dateVal.split("-");
-    console.log("dateArr="+dateArr);
-    const dailyCode = dateArr[2]  + "-" + (dateArr[1]) + "-" + dateArr[0];
-    const monthCode = (dateArr[1]) + "-" + dateArr[0];
+    const d = new Date(dateVal);
+    const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+    const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
     await updateDoc(docRef, {
         category: inputCat.value,
         description: inputDesc.value,
         daily_date_code: dailyCode,
         monthly_date_code: monthCode,
         date: serverTimestamp(new Date(dailyCode)),
-        nominal: inputNominal.value,
+        nominal: parseInt(inputNominal.value),
         updated_at: serverTimestamp()
     });
+
+    await updateDailyAndMonthly({
+        daily_date_code: dailyCode,
+        monthly_date_code: monthCode,
+        nominal: parseInt(inputNominal.value),
+    });
+
+    console.log("who first");
     setToCreate();
     listLog = [];
     getLogList();
+    getTodayExpense();
+    getMonthlyExpense();
 }
 
 function setEdit(id, data) {
     isCreate = false;
     editId = id;
+    editPreviousData = data;
     let btnCreate = document.getElementById("btn-create");
     let infoEdit = document.getElementById("info-edit");
     btnCreate.classList.remove("invisible");
@@ -176,20 +189,12 @@ function setEdit(id, data) {
     inputDesc.value = data.description;
     console.log(data.daily_date_code)
     let strDate = data.daily_date_code.split("-");
-    console.log(strDate);
-    // let d = new Date(parseInt(strDate[2]), parseInt(strDate[0])-1, parseInt(strDate[1])+1);
-    // console.log("d ="+d);
-    // const dailyCode = strDate[2]  + "/" + (strDate[1]) + "/" + strDate[0];
-    const dailyCode2 = (parseInt(strDate[2])) + "/" + (parseInt(strDate[1])) + "/" + (parseInt(strDate[0])+1);
-    console.log("dailycode2 ="+dailyCode2) 
-    // const monthCode = (strDate[1]) + "/" + strDate[2];
-    // console.log("dailycode ="+dailyCode);
-    // console.log("monthcode ="+monthCode);
-    // let e = new Date(dailyCode)
-    let f = new Date(dailyCode2)
-    // console.log("e ="+e);
-    console.log("f ="+f);
-    inputDate.valueAsDate = f;
+    let d = new Date(`${parseInt(strDate[2])}-${parseInt(strDate[1])}-${parseInt(strDate[0])}`);
+    var day = ("0" + d.getDate()).slice(-2);
+    var month = ("0" + (d.getMonth() + 1)).slice(-2);
+    var dateForInput = d.getFullYear()+"-"+(month)+"-"+(day) ;
+    console.log(dateForInput);
+    inputDate.valueAsDate = new Date(dateForInput);
     inputNominal.value = data.nominal;
 }
 
@@ -365,4 +370,118 @@ async function deleteData(id){
     await deleteDoc(doc(db, "expenses", id));
     listLog = [];
     getLogList();
+}
+
+async function decreaseDailyAndMonthlyBeforeUpdate(data) {
+    const d = data.daily_date_code.split("-");
+    const dailyCode = `${parseInt(d[0])}-${parseInt(d[1])}-${parseInt(d[2])}`;
+    const monthCode = `${parseInt(d[1])}-${parseInt(d[2])}`;
+    console.log(" DEC => " + data.nominal);
+
+    let monthlyRef = doc(db, "monthly_expenses", monthCode+"_"+userUuid);
+    const monthlySnap = await getDoc(monthlyRef);
+    console.log( monthlySnap);
+    if (monthlySnap.exists()) {
+        console.log("Monthly Exist => " + monthlySnap.exists());
+        let valueUpdate = {
+            nominal: increment(parseInt(-data.nominal)),
+            updated_at: serverTimestamp()
+        };
+        await updateDoc(monthlyRef, valueUpdate);
+    } 
+
+    let dailyRef = doc(db, "daily_expenses", dailyCode+"_"+userUuid);
+    const dailySnap = await getDoc(dailyRef);
+    console.log(dailySnap);
+    
+    if (dailySnap.exists()) {
+        console.log("Daily Exist => " + monthlySnap.exists());
+        let valueUpdate = {
+            nominal: increment(parseInt(-data.nominal)),
+            updated_at: serverTimestamp()
+        };
+        await updateDoc(dailyRef, valueUpdate);
+    }
+}
+
+async function updateDailyAndMonthly(data) {
+    try {
+        const dPref = editPreviousData.daily_date_code.split("-");
+        const dailyCodePref = `${parseInt(dPref[0])}-${parseInt(dPref[1])}-${parseInt(dPref[2])}`;
+        const monthCodePref = `${parseInt(dPref[1])}-${parseInt(dPref[2])}`;
+        const d = data.daily_date_code.split("-");
+        const dailyCode = `${parseInt(d[0])}-${parseInt(d[1])}-${parseInt(d[2])}`;
+        const monthCode = `${parseInt(d[1])}-${parseInt(d[2])}`;
+        await runTransaction(db, async (transaction) => {
+            let monthlyRefPref = doc(db, "monthly_expenses", monthCodePref+"_"+userUuid);
+            let dailyRefPref = doc(db, "daily_expenses", dailyCodePref+"_"+userUuid);
+            let monthlyRef = doc(db, "monthly_expenses", monthCode+"_"+userUuid);
+            let dailyRef = doc(db, "daily_expenses", dailyCode+"_"+userUuid);
+            const monthlySnapPref = await transaction.get(monthlyRefPref);
+            const dailySnapPref = await transaction.get(dailyRefPref);
+            const monthlySnap = await transaction.get(monthlyRef);
+            const dailySnap = await transaction.get(dailyRef);
+            
+            console.log("Pref Code => D " + dailyCodePref + " M " + monthCodePref);
+            console.log("Code => D " + dailyCode + " M " + monthCode);
+            if (monthlySnapPref.exists()) {
+                console.log("monthly pref exist");
+                await transaction.update(monthlyRefPref, {
+                    nominal: increment(-editPreviousData.nominal),
+                    updated_at: serverTimestamp()
+                });
+                
+            } 
+            if (dailySnapPref.exists()) {
+                console.log("daily pref exist");
+                await transaction.update(dailyRefPref, {
+                    nominal: increment(-editPreviousData.nominal),
+                    updated_at: serverTimestamp()
+                });
+            }
+
+            // New monthly log
+            if (monthlySnap.exists()) {
+                console.log("monthly exist");
+                await transaction.update(monthlyRef, {
+                    nominal: increment(data.nominal),
+                    updated_at: serverTimestamp()
+                });
+            } else {
+                let valueAdd = {
+                    categories: categoryMapAdd,
+                    nominal: parseInt(nominal),
+                    user_id: userUuid,
+                    timestamp: serverTimestamp(new Date()),
+                    updated_at: serverTimestamp()
+                };
+                valueAdd["categories"] = categoryMapAdd;
+                await setDoc(monthlyRef, valueAdd);
+            } 
+
+            // New daily log
+            if (dailySnap.exists()) {
+                console.log("daily exist");
+                await transaction.update(dailyRef, {
+                    nominal: increment(data.nominal),
+                    updated_at: serverTimestamp()
+                });
+            } else {
+                let valueAdd = {
+                    categories: categoryMapAdd,
+                    nominal: parseInt(nominal),
+                    user_id: uid,
+                    timestamp: serverTimestamp(new Date(date.value)),
+                    updated_at: serverTimestamp()
+                };
+                valueAdd["categories"] = categoryMapAdd;
+                await setDoc(dailyRef, valueAdd);
+            }
+            
+        });
+        console.log("Transaction successfully committed!");
+    } catch (e) {
+        console.log("Transaction failed: ", e);
+    }
+    
 }

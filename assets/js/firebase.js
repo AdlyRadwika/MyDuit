@@ -16,6 +16,7 @@ import {
     where,
     updateDoc,
     increment,
+    runTransaction
 } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
 import { 
     getAuth,
@@ -63,4 +64,5 @@ export{
     where,
     updateDoc,
     increment,
+    runTransaction
 }
