@@ -140,10 +140,11 @@ async function updateData() {
     let inputDate = document.getElementById("date");
     let inputNominal = document.getElementById("nominal");
     const dateVal = inputDate.value;
+    console.log(dateVal);
     const dateArr = dateVal.split("-");
-    console.log(dateArr);
-    const dailyCode = dateArr[1]  + "-" + (dateArr[2]) + "-" + dateArr[0];
-    const monthCode = (dateArr[2]) + "-" + dateArr[0];
+    console.log("dateArr="+dateArr);
+    const dailyCode = dateArr[2]  + "-" + (dateArr[1]) + "-" + dateArr[0];
+    const monthCode = (dateArr[1]) + "-" + dateArr[0];
     await updateDoc(docRef, {
         category: inputCat.value,
         description: inputDesc.value,
@@ -173,11 +174,22 @@ function setEdit(id, data) {
 
     inputCat.value = data.category;
     inputDesc.value = data.description;
+    console.log(data.daily_date_code)
     let strDate = data.daily_date_code.split("-");
     console.log(strDate);
-    let d = new Date(parseInt(strDate[2]), parseInt(strDate[0])-1, parseInt(strDate[1])+1);
-    console.log(d);
-    inputDate.valueAsDate = d;
+    // let d = new Date(parseInt(strDate[2]), parseInt(strDate[0])-1, parseInt(strDate[1])+1);
+    // console.log("d ="+d);
+    // const dailyCode = strDate[2]  + "/" + (strDate[1]) + "/" + strDate[0];
+    const dailyCode2 = (parseInt(strDate[2])) + "/" + (parseInt(strDate[1])) + "/" + (parseInt(strDate[0])+1);
+    console.log("dailycode2 ="+dailyCode2) 
+    // const monthCode = (strDate[1]) + "/" + strDate[2];
+    // console.log("dailycode ="+dailyCode);
+    // console.log("monthcode ="+monthCode);
+    // let e = new Date(dailyCode)
+    let f = new Date(dailyCode2)
+    // console.log("e ="+e);
+    console.log("f ="+f);
+    inputDate.valueAsDate = f;
     inputNominal.value = data.nominal;
 }
 
