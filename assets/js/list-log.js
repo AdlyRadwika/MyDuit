@@ -128,6 +128,8 @@ async function getLogList() {
         if (documentSnapshots.docs.length > 0 && documentSnapshots.docs[documentSnapshots.docs.length - 1].id != lastVisible.id) {
             listLog.push(...documentSnapshots.docs);
             lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+        } else {
+            document.getElementById("btn-paging").classList.add("invisible");
         }
     }
     let list = document.getElementById('list-log');
