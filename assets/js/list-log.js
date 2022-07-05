@@ -139,15 +139,17 @@ async function updateData() {
     let inputDesc = document.getElementById("description");
     let inputDate = document.getElementById("date");
     let inputNominal = document.getElementById("nominal");
-    const d = inputDate.value;
-    const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
-    const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
+    const dateVal = inputDate.value;
+    const dateArr = dateVal.split("-");
+    console.log(dateArr);
+    const dailyCode = dateArr[1]  + "-" + (dateArr[2]) + "-" + dateArr[0];
+    const monthCode = (dateArr[2]) + "-" + dateArr[0];
     await updateDoc(docRef, {
         category: inputCat.value,
         description: inputDesc.value,
         daily_date_code: dailyCode,
         monthly_date_code: monthCode,
-        date: serverTimestamp(new Date(inputDate.value)),
+        date: serverTimestamp(new Date(dailyCode)),
         nominal: inputNominal.value,
         updated_at: serverTimestamp()
     });
