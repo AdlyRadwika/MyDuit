@@ -203,7 +203,7 @@ function setEdit(id, data) {
 function createListElement(id, data) {
     let list = document.getElementById('list-log');
     list.innerHTML += `
-    <div class="logs card mx-auto">               
+    <div class="logs card mx-auto shadow-sm">               
         <div class="flex-container">
             <div class="flex-child magenta">
                 <div class="id-log invisible">${id}</div>

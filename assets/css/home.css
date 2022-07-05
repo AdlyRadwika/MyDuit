@@ -1,5 +1,12 @@
+body{
+    background-color: #80CED7;
+}
+
+
 .overview{
     margin-top: 3%;
+    background-color: #ffffff;
+    border: none;
 }
 
 .card .overview-h1{
@@ -36,11 +43,24 @@
 }
 .things .input, .monthly-logs{
     width: fit-content;
+    background-color: #fff;
+    border: none;
+}
+
+.things .card{
+    background-color: #fff;
+    border: none;
 }
 .things h3{
     text-align: center;
 }
 
+.insert .form-select, .form-control{
+    border-radius:10px;
+    border: none;
+    box-sizing:border-box;
+    background-color: #E8E8E8;
+}
 .insert .button{
     text-align: center;
 }

@@ -10,34 +10,27 @@
     <title>MyDuit - Homepage OTW</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg bg-light sticky-top">
         <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-            </li>
-        </ul>
-        <form class="d-flex" role="logout">
-            <button class="btn-logout">Logout</button>
-        </form>
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="navbar-brand" href="#">MyDuit</a>
+                </li>
+                <li class="nav-item">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                            <button class="btn-logout">Logout</button>
+                    </div>
+                </li> 
+            </ul>
         </div>
     </div>
     </nav>
-    <div class="overview card mx-auto w-75">
+    <div class="overview card mx-auto w-75 shadow-sm">
         <div class="card-body">
             <h1 class="overview-h1">Overview</h1>
-            <hr>
             <div class="container">
                 <div class="first row">
                     <div class="col-md-4">
@@ -63,13 +56,13 @@
         </div>
     </div>
     <div class="things row mx-auto justify-content-evenly">
-        <div class="col-md-4">
-            <div class="input card mx-auto w-100">
+        <div class="col-md-4">        
+            <div class="input card mx-auto w-100 shadow-sm">
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="card-body">
                         <h3>Insert Expense</h3>
-                    </div>            
-                    <div class="d-flex justify-content-between">
+                    </div>
+                    <div class="d-flex justify-content-between" id="visible-btn">
                         <div class="invisible" id="info-edit"><i>Edit Mode</i></div>
                         <button id="btn-create" type="button" class="btn btn-primary invisible">
                             Create
@@ -108,7 +101,7 @@
             </div> 
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h3>Logs</h3>
                 </div>
