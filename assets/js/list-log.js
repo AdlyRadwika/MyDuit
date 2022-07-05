@@ -168,6 +168,8 @@ async function updateData() {
     setToCreate();
     listLog = [];
     getLogList();
+    getTodayExpense();
+    getMonthlyExpense();
 }
 
 function setEdit(id, data) {

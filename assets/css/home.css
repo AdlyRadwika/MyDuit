@@ -6,6 +6,10 @@
     text-align: center;
 }
 
+.monthly{
+    text-align: end;
+}
+
 /* https://coder-coder.com/display-divs-side-by-side/ */
 .flex-container {
     display: flex;
