@@ -147,7 +147,6 @@ async function updateData() {
     const d = new Date(dateVal);
     const dailyCode = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
     const monthCode = (d.getMonth()+1) + "-" + d.getFullYear();
-
     await updateDoc(docRef, {
         category: inputCat.value,
         description: inputDesc.value,
@@ -188,6 +187,7 @@ function setEdit(id, data) {
 
     inputCat.value = data.category;
     inputDesc.value = data.description;
+    console.log(data.daily_date_code)
     let strDate = data.daily_date_code.split("-");
     let d = new Date(parseInt(strDate[2]), parseInt(strDate[0])-1, parseInt(strDate[1])+1);
     console.log(d);
