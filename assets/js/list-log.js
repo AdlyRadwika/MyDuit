@@ -374,38 +374,6 @@ async function deleteData(id){
     getLogList();
 }
 
-async function decreaseDailyAndMonthlyBeforeUpdate(data) {
-    const d = data.daily_date_code.split("-");
-    const dailyCode = `${parseInt(d[0])}-${parseInt(d[1])}-${parseInt(d[2])}`;
-    const monthCode = `${parseInt(d[1])}-${parseInt(d[2])}`;
-    console.log(" DEC => " + data.nominal);
-
-    let monthlyRef = doc(db, "monthly_expenses", monthCode+"_"+userUuid);
-    const monthlySnap = await getDoc(monthlyRef);
-    console.log( monthlySnap);
-    if (monthlySnap.exists()) {
-        console.log("Monthly Exist => " + monthlySnap.exists());
-        let valueUpdate = {
-            nominal: increment(parseInt(-data.nominal)),
-            updated_at: serverTimestamp()
-        };
-        await updateDoc(monthlyRef, valueUpdate);
-    } 
-
-    let dailyRef = doc(db, "daily_expenses", dailyCode+"_"+userUuid);
-    const dailySnap = await getDoc(dailyRef);
-    console.log(dailySnap);
-    
-    if (dailySnap.exists()) {
-        console.log("Daily Exist => " + monthlySnap.exists());
-        let valueUpdate = {
-            nominal: increment(parseInt(-data.nominal)),
-            updated_at: serverTimestamp()
-        };
-        await updateDoc(dailyRef, valueUpdate);
-    }
-}
-
 async function updateDailyAndMonthly(data) {
     try {
         const dPref = editPreviousData.daily_date_code.split("-");
@@ -451,13 +419,11 @@ async function updateDailyAndMonthly(data) {
                 });
             } else {
                 let valueAdd = {
-                    categories: categoryMapAdd,
-                    nominal: parseInt(nominal),
+                    nominal: parseInt(data.nominal),
                     user_id: userUuid,
                     timestamp: serverTimestamp(new Date()),
                     updated_at: serverTimestamp()
                 };
-                valueAdd["categories"] = categoryMapAdd;
                 await setDoc(monthlyRef, valueAdd);
             } 
 
@@ -470,13 +436,11 @@ async function updateDailyAndMonthly(data) {
                 });
             } else {
                 let valueAdd = {
-                    categories: categoryMapAdd,
-                    nominal: parseInt(nominal),
-                    user_id: uid,
+                    nominal: parseInt(data.nominal),
+                    user_id: userUuid,
                     timestamp: serverTimestamp(new Date(date.value)),
                     updated_at: serverTimestamp()
                 };
-                valueAdd["categories"] = categoryMapAdd;
                 await setDoc(dailyRef, valueAdd);
             }
             
