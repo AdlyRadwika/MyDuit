@@ -63,7 +63,7 @@ window.onload = function () {
                 }
             });
 
-            const logoutButton = document.querySelector('.btn-logout')
+            const logoutButton = document.querySelector('.logout')
             logoutButton.addEventListener('click', async () => {
                 signOut(auth)
                 .then(() => {
@@ -204,11 +204,11 @@ function createListElement(id, data) {
     let list = document.getElementById('list-log');
     list.innerHTML += `
     <div class="logs card mx-auto shadow-sm">               
+    <div class="id-log invisible">${id}</div>       
         <div class="flex-container">
             <div class="flex-child magenta">
-                <div class="id-log invisible">${id}</div>
-                <h4 class="center">${data.category}</h4>
-                <p class="center2 fs-6">${data.description}</p>
+            <h4 class="center">${data.category}</h4>
+            <p class="center2 fs-6">${data.description}</p>
             </div>
             <div class="flex-child green">
                 <div class="icon-row">
@@ -218,8 +218,9 @@ function createListElement(id, data) {
                 <div class="icon-row2">
                     <p class="center fs-6">${data.daily_date_code}</p>
                     <button class="delete-log btn"><i class="bi bi-trash-fill"></i></button>
-                </div>
-            </div>                            
+                </div>        
+            </div>
+                                        
         </div>              
     </div>
     `

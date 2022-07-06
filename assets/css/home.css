@@ -2,6 +2,24 @@ body{
     background-color: #80CED7;
 }
 
+.navbar{
+    background-color: #ffffff
+}
+
+.logout{
+    display: inline-block;
+    background: #003249;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+.logout:hover{
+    cursor: pointer;
+    color: white;
+    background: #00324993;
+    border: none;
+}
+
 
 .overview{
     margin-top: 3%;
@@ -13,12 +31,12 @@ body{
     text-align: center;
 }
 
-.monthly{
-    text-align: end;
+.today, .monthly{
+    text-align: center;
 }
 
 /* https://coder-coder.com/display-divs-side-by-side/ */
-.flex-container {
+.flex-container {   
     display: flex;
 }
 .flex-child {
@@ -27,10 +45,10 @@ body{
 .flex-child:first-child {
     margin-right: 20px;
 }
-.flex-child.green{
-    text-align: end;
+.flex-child.magenta{
+    text-align: start;
 }
-.flex-child.orange{
+.flex-child.green{
     text-align: end;
 }
 
@@ -55,6 +73,10 @@ body{
     text-align: center;
 }
 
+.input, .log{
+    margin-top: 10px;
+}
+
 .insert .form-select, .form-control{
     border-radius:10px;
     border: none;
@@ -62,6 +84,10 @@ body{
     background-color: #E8E8E8;
 }
 .insert .button{
+    text-align: center;
+}
+
+#btn-paging{
     text-align: center;
 }
 
@@ -88,4 +114,23 @@ body{
 
 .monthly-logs .months{
     text-align: center;
+}
+
+/* NAVBAR */
+.navbar-brand{
+    float: left;
+}
+
+.navbar-collapse{
+    float: right;
+}
+
+@media screen and (max-width: 991.2px){
+    .container{
+        display: contents;
+    }
+
+    #navbar-logout{
+        align-self: start;
+    }
 }

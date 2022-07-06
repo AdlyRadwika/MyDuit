@@ -10,53 +10,50 @@
     <title>MyDuit - Homepage OTW</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light sticky-top">
+    <nav class="navbar navbar-expand-lg sticky-top shadow">
         <div class="container-fluid">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <a class="navbar-brand" href="#">MyDuit</a>
-                </li>
-                <li class="nav-item">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="container">                
+                <a class="navbar-brand" href="#">MyDuit</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                            <button class="btn-logout">Logout</button>
-                    </div>
-                </li> 
-            </ul>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav">
+                        <li class="nav-item" id="navbar-overview">
+                            <a class="nav-link active" aria-current="page" href="#overview-section">Overview</a>
+                        </li>
+                        <li class="nav-item" id="navbar-insert">
+                            <a class="nav-link active" href="#insert-section">Insert Expense</a>
+                        </li>
+                        <li class="nav-item" id="navbar-log">
+                            <a class="nav-link active" href="#log-section">Logs</a>
+                        </li>
+                        <li class="nav-item" id="navbar-logout" style="align-self: center;">
+                            <button class="btn logout">Logout</button>
+                        </li>
+                    </ul>    
+                </div>
+            </div>
         </div>
     </div>
     </nav>
-    <div class="overview card mx-auto w-75 shadow-sm">
+    <div class="overview card mx-auto w-75 shadow-sm" id="overview-section">
         <div class="card-body">
             <h1 class="overview-h1">Overview</h1>
-            <div class="container">
-                <div class="first row">
-                    <div class="col-md-4">
-                        <div class="today">
-                            <h6>Today Expense</h6>
-                            <h1 id="tv-today-expense">0</h1>
-                        </div>
-                    </div>
-                    <div class="col-md-4 offset-md-4">
-                        <div class="flex-container">
-                            <div class="flex-child magenta">
-                            </div>
-                            <div class="flex-child green">
-                                <div class="monthly">
-                                    <h6>Monthly Expense</h6>                         
-                                    <h1 id="tv-monthly-expense">0</h1>
-                                </div>
-                            </div>                            
-                        </div>
-                    </div>
+            <div class="container row">
+                <div class="today col">
+                    <h6>Today Expense</h6>
+                    <h1 id="tv-today-expense">0</h1>
+                </div>
+                <div class="monthly col">
+                    <h6>Monthly Expense</h6>                         
+                    <h1 id="tv-monthly-expense">0</h1>
                 </div>
             </div>
         </div>
     </div>
     <div class="things row mx-auto justify-content-evenly">
-        <div class="col-md-4">        
+        <div class="col-md-4" id="insert-section">        
             <div class="input card mx-auto w-100 shadow-sm">
                 <div class="card-body">
                     <div class="card-body">
@@ -100,15 +97,13 @@
                 </div>
             </div> 
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm">
+        <div class="col-md-4" id="log-section">
+            <div class="log card shadow-sm">
                 <div class="card-body">
                     <h3>Logs</h3>
                 </div>
             </div>
-            <div id="list-log" class="overflow-scroll my-3" style="height: 70vh;">
-
-            </div>
+            <div id="list-log" class="my-3" style="overflow-y: scroll; max-height: 63vh;">            </div>
             <button id="btn-paging" class="btn btn-primary">
                 Load more
             </button>
